@@ -1,0 +1,3 @@
+key_name        = "devops-bootstrap"
+public_key_path = "~/.ssh/devops-bootstrap.key.pub"
+instance_name   = "devops-bootstrap-instance"
