@@ -45,3 +45,23 @@ terraform apply
 
 ssh -i ~/.ssh/devops-bootstrap.key ubuntu@<PUBLIC-IP>
 ```
+
+## Step 2 : Install Docker with Ansible
+
+**Goal** : Automatically install Docker on the EC2 instance with Ansible over SSH.
+
+**How** :
+
+1. Update the IP address in `configuration/ansible/inventory.ini`
+2. Run the playbook:
+
+```bash
+cd configuration/ansible/
+ansible-playbook -i inventory.ini playbook.yml
+```
+
+**Verify with** :
+
+```bash
+ssh -i ~/.ssh/devops-bootstrap.key ubuntu@<PUBLIC-IP> docker -v
+```
