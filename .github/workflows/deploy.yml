@@ -23,9 +23,7 @@ jobs:
 
       - name: Set up Ansible inventory with CI secrets
         run:
-          sed -i -e 's/<EC2_PUBLIC_IP>/${{ secrets.EC2_HOST }}/' \
-           -e 's/<SSH_PRIVATE_KEY>/~\/.ssh\/id_rsa/' \
-            configuration/ansible/inventory.ini
+          sed -i -e 's/<EC2_PUBLIC_IP>/${{ secrets.EC2_HOST }}/' -e 's/<SSH_PRIVATE_KEY>/~\/.ssh\/id_rsa/' configuration/ansible/inventory.ini
 
       - name: Run Ansible Playbook
         run: 
