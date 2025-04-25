@@ -1,5 +1,5 @@
 - name: Provision web server
-  hosts: all
+  hosts: web
   become: true
   
   tasks:

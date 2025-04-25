@@ -21,10 +21,12 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Debug secrets
-        run: |
-          ssh -i ~/.ssh/id_rsa ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} docker -v
+      - name: Set up Ansible inventory with CI secrets
+        run:
+          sed -i -e 's/<EC2_PUBLIC_IP>/${{ secrets.EC2_HOST }}/' \
+           -e 's/<SSH_PRIVATE_KEY>/~\/.ssh\/id_rsa/' \
+            configuration/ansible/inventory.ini
 
-      # - name: Run Ansible Playbook
-      #   run: 
-      #     ansible-playbook configuration/ansible/playbook.yml -i ${{ secrets.EC2_HOST }} -u ${{ secrets.EC2_USER }} --private-key ~/.ssh/id_rsa
+      - name: Run Ansible Playbook
+        run: 
+          ansible-playbook -i configuration/ansible/inventory.ini configuration/ansible/playbook.yml
