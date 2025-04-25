@@ -14,11 +14,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Debug secrets
-        run: |
-          echo "EC2 host: ${{ secrets.EC2_HOST }}"
-          echo "EC2 user: ${{ secrets.EC2_USER }}"
-
       - name: Set up SSH
         run: |
           mkdir -p ~/.ssh
@@ -26,6 +21,10 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Run Ansible Playbook
-        run: 
-          ansible-playbook configuration/ansible/playbook.yml -i ${{ secrets.EC2_HOST }} -u ${{ secrets.EC2_USER }} --private-key ~/.ssh/id_rsa
+      - name: Debug secrets
+        run: |
+          ssh -i ~/.ssh/id_rsa ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} docker -v
+
+      # - name: Run Ansible Playbook
+      #   run: 
+      #     ansible-playbook configuration/ansible/playbook.yml -i ${{ secrets.EC2_HOST }} -u ${{ secrets.EC2_USER }} --private-key ~/.ssh/id_rsa
