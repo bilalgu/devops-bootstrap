@@ -65,3 +65,22 @@ ansible-playbook -i inventory.ini playbook.yml
 ```bash
 ssh -i ~/.ssh/devops-bootstrap.key ubuntu@<PUBLIC-IP> docker -v
 ```
+
+## Step 3 : Deploy a static site in a Docker container with Ansible
+
+**Goal** : Automatically build and deploy a static Nginx site inside a Docker container.
+
+**How** :
+
+Run the updated playbook :
+
+```bash
+cd configuration/ansible/
+ansible-playbook -i inventory.ini playbook.yml
+```
+
+**Verifiy with** (or open your browser) :
+
+```bash
+curl <EC2_PUBLIC_IP>
+```
