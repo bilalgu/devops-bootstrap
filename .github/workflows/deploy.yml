@@ -14,6 +14,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Debug secrets
+        run: |
+          echo "EC2 host: ${{ secrets.EC2_HOST }}"
+          echo "EC2 user: ${{ secrets.EC2_USER }}"
+
       - name: Set up SSH
         run: |
           mkdir -p ~/.ssh
