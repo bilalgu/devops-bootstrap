@@ -41,16 +41,16 @@ resource "aws_instance" "web" {
   instance_type               = var.instance_type
   key_name                    = aws_key_pair.main.key_name
   associate_public_ip_address = true
-  vpc_security_group_ids = [aws_security_group.ssh_access.id]
+  vpc_security_group_ids = [aws_security_group.web_sg.id]
 
   tags = merge(
     local.default_tags, { Name = var.instance_name }
   )
 }
 
-resource "aws_security_group" "ssh_access" {
-  name = "devops-ssh-access"
-  description = "Allow SSH"
+resource "aws_security_group" "web_sg" {
+  name = "${var.instance_name}-sg"
+  description = "Allow SSH and HTTP"
   vpc_id = data.aws_vpc.default.id
 
   ingress {
@@ -61,7 +61,16 @@ resource "aws_security_group" "ssh_access" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ingress {
+    description = "HTTP from anywhere"
+    from_port = 80
+    to_port = 80
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   egress {
+    description = "Allow all outbond traffic"
     from_port = 0
     to_port = 0
     protocol = "-1"

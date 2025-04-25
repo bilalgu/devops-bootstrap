@@ -1,0 +1,26 @@
+- name: Copy index.html to remote
+  copy:
+    src: index.html
+    dest: /tmp/index.html
+
+- name: Copy Dockerfile to remote
+  copy:
+    src: Dockerfile
+    dest: /tmp/Dockerfile
+
+- name: Build Docker image for Nginx static site
+  docker_image:
+    name: devops-bootstrap-nginx
+    build:
+      path: /tmp
+    source: build
+
+- name: Run Nginx container
+  docker_container:
+    name: nginx_site
+    image: devops-bootstrap-nginx
+    state: started
+    restart_policy: unless-stopped
+    ports:
+      - "80:80"
+    
