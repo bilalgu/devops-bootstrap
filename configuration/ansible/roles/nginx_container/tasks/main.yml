@@ -19,6 +19,7 @@
     build:
       path: /tmp
     source: build
+    force_source: true
 
 - name: Run Nginx container
   docker_container:
