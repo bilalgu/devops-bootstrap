@@ -1,3 +1,8 @@
+- name: Stop and remove existing Nginx container if it exists
+  docker_container:
+    name: nginx_site
+    state: absent
+
 - name: Copy index.html to remote
   copy:
     src: index.html

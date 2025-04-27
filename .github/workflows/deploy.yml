@@ -28,10 +28,6 @@ jobs:
         run:
           sed -i -e 's/<EC2_PUBLIC_IP>/${{ secrets.EC2_HOST }}/' -e 's/<SSH_PRIVATE_KEY>/~\/.ssh\/id_rsa/' configuration/ansible/inventory.ini
 
-      - name: Debug index.html
-        run:
-          cat configuration/ansible/roles/nginx_container/files/index.html
-
       - name: Run Ansible Playbook
         run:
           ansible-playbook -i configuration/ansible/inventory.ini configuration/ansible/playbook.yml
