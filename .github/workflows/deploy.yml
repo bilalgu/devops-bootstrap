@@ -2,6 +2,9 @@ name: Deploy with Ansible
 
 on:
   push:
+    branches:
+      - main
+      - ci/test-pipeline
     paths:
       - 'app/**'
       - 'configuration/ansible/**'
