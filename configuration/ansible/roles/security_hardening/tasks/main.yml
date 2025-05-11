@@ -1,0 +1,31 @@
+- name: Install fail2ban
+  apt:
+    name: fail2ban
+    state: present
+
+- name: Copy jail.local
+  copy:
+    src: jail.local
+    dest: /etc/fail2ban/jail.local
+
+- name: Copy custom filter
+  copy:
+    src: sshd-ec2connect.conf
+    dest: /etc/fail2ban/filter.d/sshd-ec2connect.conf
+
+- name: Copy hardened sshd_config
+  template:
+    src: sshd_config.j2
+    dest: /etc/ssh/sshd_config
+
+- name: Restart ssh service
+  service:
+    name: ssh
+    state: restarted
+    enabled: true
+
+- name: Restart fail2ban service
+  service:
+    name: fail2ban
+    state: restarted
+    enabled: true

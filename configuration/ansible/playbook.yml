@@ -21,3 +21,7 @@
     - name: Deploy nginx container
       include_role:
         name: nginx_container
+
+    - name: Apply security hardening
+      include_role:
+        name: security_hardening

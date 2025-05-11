@@ -1,0 +1,8 @@
+[sshd-ec2connect]
+enabled = true
+filter = sshd-ec2connect
+logpath = /var/log/auth.log
+port = ssh
+bantime = 3600
+findtime = 600
+maxretry = 3
