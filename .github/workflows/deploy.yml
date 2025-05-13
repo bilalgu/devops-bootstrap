@@ -6,7 +6,6 @@ on:
       - main
       - ci/test-pipeline
     paths:
-      - 'app/**'
       - 'configuration/ansible/**'
 
 jobs:
