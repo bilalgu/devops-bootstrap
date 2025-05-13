@@ -6,7 +6,7 @@ Build a lightweight Docker image serving a static site with Nginx and deploy it 
 
 **Prerequisites :**
 
-- Docker installed on the EC2 instance ([Step2](02-configuration-ansible))
+- Docker installed on the EC2 instance ([Step2](02-configuration-ansible.md))
 
 **File structure :**
 
