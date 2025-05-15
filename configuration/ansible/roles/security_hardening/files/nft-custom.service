@@ -1,0 +1,9 @@
+[Unit]
+Description=Add custom nftables rules (without overwriting existing chains)
+After=network.target docker.service
+
+[Service]
+ExecStart=/usr/local/bin/nft-custom.sh
+
+[Install]
+WantedBy=multi-user.target

@@ -14,8 +14,8 @@
     dest: /etc/fail2ban/filter.d/sshd-ec2connect.conf
 
 - name: Copy hardened sshd_config
-  template:
-    src: sshd_config.j2
+  copy:
+    src: sshd_config
     dest: /etc/ssh/sshd_config
 
 - name: Restart ssh service
@@ -29,3 +29,20 @@
     name: fail2ban
     state: restarted
     enabled: true
+
+- name: Copy custom nftables rule script
+  copy: 
+    src: nft-custom.sh
+    dest: /usr/local/bin/nft-custom.sh
+    mode: 744
+
+- name: Copy systemd service for nftables rule script
+  copy:
+    src: nft-custom.service
+    dest: /etc/systemd/system/nft-custom.service 
+
+- name: Enable and start custom nftables service
+  systemd:
+    name: nft-custom.service
+    enabled: true
+    state: started
