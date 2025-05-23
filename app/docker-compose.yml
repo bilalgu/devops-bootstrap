@@ -1,0 +1,38 @@
+services:
+  web:
+    image: "nginx:alpine"
+    ports:
+      - "80:80"
+    depends_on:
+        back:
+            condition: service_started
+    networks:
+      - app-net
+
+  back:
+    build: ../backend
+    ports:
+      - "8080:8080"
+    depends_on:
+        db:
+            condition: service_started
+    networks:
+      - app-net
+
+  db:
+    image: "postgres:alpine"
+    restart: always
+    environment:
+        POSTGRES_DB: appdb
+        POSTGRES_USER: appuser
+        POSTGRES_PASSWORD: mysecretpassword
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - app-net
+
+volumes:
+  pgdata:
+
+networks:
+  app-net:
