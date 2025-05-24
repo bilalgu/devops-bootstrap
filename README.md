@@ -1,15 +1,18 @@
 # DevOps Bootstrap Stack
 
-Automatically provisions a minimalist cloud infrastructure to host a simple web service, in a realistic and reproducible DevOps context.
+A minimalist realistic DevOps project that provisions cloud infrastructure, configures it automatically, and deploys a secure, scalable, and containerized web service.
 
 ## Objectives
 
 Build a DevOps stack that includes:
 
-- Infrastructure as Code with Terraform
-- Cloud VM provisioning on AWS
-- Automated configuration with Ansible 
-- Containerized web service deployment (Nginx + Docker)
+- Infrastructure as Code with Terraform (AWS EC2 provisioning)
+- Configuration Management with Ansible
+- Containerized Multi-Service Stack :
+	- `web` - static frontend (Nginx)
+	- `back` - API (Node.js with Express)
+	- `db` - (PostgreSQL)
+- Security hardening (SSH + firewall + fail2ban + nftables)
 - CI/CD pipeline via GitHub Actions
 
 This project serves as a technical portfolio, a personal learning environment, and a solid foundation for more advanced DevOps/Cyber/Cloud scenarios.
@@ -30,11 +33,18 @@ ansible-playbook -i inventory.ini playbook.yml
 
 ```bash
 curl <EC2_PUBLIC_IP>
+# curl http://<EC2_PUBLIC_IP>
+# or simply open your browser)
 
-# You can get EC2_PUBLIC_IP with -->
+ssh -i ~/.ssh/devops-bootstrap.key ubuntu@<EC2_PUBLIC_IP> curl localhost:8080/hello
+
+ssh -i ~/.ssh/devops-bootstrap.key ubuntu@<EC2_PUBLIC_IP> curl localhost:8080/health
+```
+
+You can get `<EC2_PUBLIC_IP>` with :
+
+```bash
 aws ec2 describe-instances --filters Name=tag:Name,Values=devops-bootstrap-instance --query 'Reservations[*].Instances[*].NetworkInterfaces[*].Association.PublicIp' | grep [0-9] | sed -e 's/ *//' -e 's/"//g'
-
-# (or simply open your browser) 
 ```
 
 ## CI/CD Pipeline
