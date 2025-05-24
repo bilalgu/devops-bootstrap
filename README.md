@@ -34,7 +34,7 @@ ansible-playbook -i inventory.ini playbook.yml
 ```bash
 curl <EC2_PUBLIC_IP>
 # curl http://<EC2_PUBLIC_IP>
-# or simply open your browser)
+# or simply open your browser
 
 ssh -i ~/.ssh/devops-bootstrap.key ubuntu@<EC2_PUBLIC_IP> curl localhost:8080/hello
 
