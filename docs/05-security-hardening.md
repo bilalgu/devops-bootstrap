@@ -97,7 +97,6 @@ ansible-playbook -i inventory.ini playbook.yml
 List active rules
 
 ```bash
-ssh -i ~/.ssh/devops-bootstrap.key ubuntu@<EC2_PUBLIC_IP>
-sudo nft list ruleset
+ssh -i ~/.ssh/devops-bootstrap.key ubuntu@<EC2_PUBLIC_IP> sudo nft list ruleset
 ```
 

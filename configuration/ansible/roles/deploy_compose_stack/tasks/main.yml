@@ -1,0 +1,29 @@
+- name: Create deployment directory
+  file:
+    path: /opt/devops-bootstrap/
+    state: directory
+
+- name: Copy docker-compose.yml
+  copy:
+    src: docker-compose.yml
+    dest: /opt/devops-bootstrap/docker-compose.yml
+
+- name: Copy web directory
+  copy:
+    src: web/
+    dest: /opt/devops-bootstrap/web
+
+- name: Copy backend directory
+  copy:
+    src: backend/
+    dest: /opt/devops-bootstrap/backend/
+
+- name: Install docker-compose
+  apt:
+    name: docker-compose
+    state: present
+
+- name: Launch docker-compose stack
+  shell: docker-compose up -d
+  args:
+    chdir: /opt/devops-bootstrap/

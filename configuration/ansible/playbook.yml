@@ -1,5 +1,5 @@
-- name: Provision web server
-  hosts: web
+- name: Deploy DevOps Bootstrap Stack
+  hosts: bootstrap_stack
   become: true
   
   tasks:
@@ -18,9 +18,9 @@
         state: started
         enabled: true
 
-    - name: Deploy nginx container
+    - name: Deploy multi-service app
       include_role:
-        name: nginx_container
+        name: deploy_compose_stack
 
     - name: Apply security hardening
       include_role:
