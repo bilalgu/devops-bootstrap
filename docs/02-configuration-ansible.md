@@ -22,17 +22,32 @@ Provision a remote Ubuntu server with Docker installed, using Ansible over SSH.
 
 **Deployment :**
 
-1. Update the `inventory.ini` file with the instance's public IP
+1. Update the `inventory.ini` file with the instance's public IP **OR** generate a temporary file :
 
 ```bash
-cd configuration/ansible/
-sed -i 's/<EC2_PUBLIC_IP>/w.x.y.z/' inventory.ini
+cat << 'EOF' > generate-inventory.sh
+#!/bin/bash
+
+EC2_IP=$(aws ec2 describe-instances \
+  --filters Name=tag:Name,Values=devops-bootstrap-instance \
+  --query 'Reservations[*].Instances[*].NetworkInterfaces[*].Association.PublicIp' \
+  | grep [0-9] | sed -e 's/ *//' -e 's/"//g')
+
+echo "EC2_PUBLIC_IP : $EC2_IP"
+
+cp configuration/ansible/inventory.ini configuration/ansible/tmp-inventory.ini
+sed -i "s/<EC2_PUBLIC_IP>/$EC2_IP/" configuration/ansible/tmp-inventory.ini
+EOF
+
+chmod u+x generate-inventory.sh
+./generate-inventory.sh
 ```
 
 2. Execute the playbook
 
 ```bash
-ansible-playbook -i inventory.ini playbook.yml
+cd configuration/ansible/
+ansible-playbook -i tmp-inventory.ini playbook.yml
 ```
 
 **Verification :**
