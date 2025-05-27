@@ -25,7 +25,7 @@ Provision a remote Ubuntu server with Docker installed, using Ansible over SSH.
 1. Update the `inventory.ini` file with the instance's public IP **OR** generate a temporary file :
 
 ```bash
-cat << 'EOF' > generate-inventory.sh
+cat << EOF > generate-inventory.sh
 #!/bin/bash
 
 EC2_IP=$(aws ec2 describe-instances \

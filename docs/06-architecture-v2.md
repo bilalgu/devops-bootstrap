@@ -1,9 +1,10 @@
-# Step 6 - V2 Architecture : Multi-Service Stack (Web / API / DB)
+# Step 6 - V2 Architecture : Multi-Service Stack (Web / API / DB) with Reverse Proxy (Traefik)
 
 **Objective :**
 
 Design and deploy a realistic and scalable container-based architecture composed of three services :
 
+- `traefik` - Reverse proxy that centralizes all HTTP traffic
 - `web` - Frontend (static files : HTML/CSS/JS served by Nginx)
 - `back` - Backend/API (Node.js with Express)
 - `db` - Database (PostgreSQL)
@@ -34,8 +35,10 @@ Design and deploy a realistic and scalable container-based architecture composed
 
 - The full stack runs via `docker-compose`
 - All services communicate through an internal Docker network (`app-net`)
-- Only the `web` service is exposed to the internet (minimized surface)
-- `back` and `db` are internal-only services
+- Only `traefik` is exposed to the internet (minimized surface)
+- `traefik` dynamically routes :
+	- `/` to the `web` service
+	- `/api` to the `back` service
 - `db` stores data persistently using a Docker volume
 - A healthcheck is used to ensure the DB is ready before the API attempts to connect
 
@@ -48,19 +51,23 @@ ansible-playbook -i inventory.ini playbook.yml
 
 **Validation :**
 
-1. Check the `web` and `back` services
+1. Check the `web` and `back` services through `traefik` :
 
 ```bash
 curl <EC2_PUBLIC_IP>
 
-ssh -i ~/.ssh/devops-bootstrap.key ubuntu@<EC2_PUBLIC_IP> curl localhost:8080/hello
+curl <EC2_PUBLIC_IP>/api/hello
 
-ssh -i ~/.ssh/devops-bootstrap.key ubuntu@<EC2_PUBLIC_IP> curl localhost:8080/health
+curl <EC2_PUBLIC_IP>/api/health
+
+# also http://<EC2_PUBLIC_IP>/ - or simply open your browser
 ```
 
 2. Inspect the service container's logs
 
 ```bash
+ssh -i ~/.ssh/devops-bootstrap.key ubuntu@<EC2_PUBLIC_IP> sudo docker ps -a
+
 ssh -i ~/.ssh/devops-bootstrap.key ubuntu@<EC2_PUBLIC_IP> sudo docker logs devops-bootstrap_back_1
 
 ssh -i ~/.ssh/devops-bootstrap.key ubuntu@<EC2_PUBLIC_IP> sudo docker logs devops-bootstrap_web_1
@@ -112,9 +119,3 @@ docker exec -it devops-bootstrap_db_1 psql -U appuser -d appdb
 ```sql
 SELECT * FROM test;
 ```
-
-***
-
-**Next step :**
-
-- Introduce Traefik to centralize HTTP routing

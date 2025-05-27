@@ -26,11 +26,11 @@ dbClient.connect()
         console.error('Error connecting to the database :', err)
     })
 
-app.get('/hello', (req, res) => {
+app.get('/api/hello', (req, res) => {
     res.json({ message: 'Hello from Node.js!'})
 })
 
-app.get('/health', (req, res) => {
+app.get('/api/health', (req, res) => {
     res.send('OK\n')
 })
 
