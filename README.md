@@ -9,7 +9,8 @@ Build a DevOps stack that includes:
 - Infrastructure as Code with Terraform (AWS EC2 provisioning)
 - Configuration Management with Ansible
 - Containerized Multi-Service Stack :
-	- `web` - static frontend (Nginx)
+	- `traefik` - Reverse proxy
+	- `web` - Static frontend (Nginx)
 	- `back` - API (Node.js with Express)
 	- `db` - (PostgreSQL)
 - Security hardening (SSH + firewall + fail2ban + nftables)
@@ -33,12 +34,12 @@ ansible-playbook -i inventory.ini playbook.yml
 
 ```bash
 curl <EC2_PUBLIC_IP>
-# curl http://<EC2_PUBLIC_IP>
-# or simply open your browser
 
-ssh -i ~/.ssh/devops-bootstrap.key ubuntu@<EC2_PUBLIC_IP> curl localhost:8080/hello
+curl <EC2_PUBLIC_IP>/api/hello
 
-ssh -i ~/.ssh/devops-bootstrap.key ubuntu@<EC2_PUBLIC_IP> curl localhost:8080/health
+curl <EC2_PUBLIC_IP>/api/health
+
+# also http://<EC2_PUBLIC_IP>/ - or simply open your browser
 ```
 
 You can get `<EC2_PUBLIC_IP>` with :
