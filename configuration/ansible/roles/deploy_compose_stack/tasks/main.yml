@@ -18,6 +18,11 @@
     src: backend/
     dest: /opt/devops-bootstrap/backend/
 
+- name: Copy prometheus.yml
+  copy:
+    src: prometheus.yml
+    dest: /opt/devops-bootstrap/prometheus.yml
+
 - name: Install docker-compose
   apt:
     name: docker-compose

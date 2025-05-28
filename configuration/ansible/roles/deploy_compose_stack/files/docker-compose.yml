@@ -61,6 +61,30 @@ services:
     networks:
       - app-net
 
+  cadvisor:
+    image: "gcr.io/cadvisor/cadvisor"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    networks:
+      - app-net
+
+  prometheus:
+    image: "prom/prometheus"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.prometheus.rule=PathPrefix(`/monitoring`)"
+      - "traefik.http.routers.prometheus.entrypoints=web"
+      - "traefik.http.middlewares.strip-monitoring.stripPrefix.prefixes=/monitoring"
+      - "traefik.http.routers.prometheus.middlewares=strip-monitoring"
+      - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - app-net
+
 volumes:
   pgdata:
 

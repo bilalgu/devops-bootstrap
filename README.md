@@ -13,6 +13,8 @@ Build a DevOps stack that includes:
 	- `web` - Static frontend (Nginx)
 	- `back` - API (Node.js with Express)
 	- `db` - (PostgreSQL)
+	- `cadvisor` — Exposes live container and host metrics
+	- `prometheus` — Collects metrics and provides a query interface
 - Security hardening (SSH + firewall + fail2ban + nftables)
 - CI/CD pipeline via GitHub Actions
 
@@ -33,13 +35,13 @@ ansible-playbook -i inventory.ini playbook.yml
 ## Results
 
 ```bash
-curl <EC2_PUBLIC_IP>
+# Main entrypoints:
+curl http://<EC2_PUBLIC_IP>                   # frontend
+curl http://<EC2_PUBLIC_IP>/api/hello         # backend API
+curl http://<EC2_PUBLIC_IP>/api/health        # backend health check
+curl http://<EC2_PUBLIC_IP>/monitoring/query  # Prometheus query UI
 
-curl <EC2_PUBLIC_IP>/api/hello
-
-curl <EC2_PUBLIC_IP>/api/health
-
-# also http://<EC2_PUBLIC_IP>/ - or simply open your browser
+# Or simply open http://<EC2_PUBLIC_IP> in your browser
 ```
 
 You can get `<EC2_PUBLIC_IP>` with :
