@@ -31,7 +31,7 @@ cat << EOF > generate-inventory.sh
 EC2_IP=$(aws ec2 describe-instances \
   --filters Name=tag:Name,Values=devops-bootstrap-instance \
   --query 'Reservations[*].Instances[*].NetworkInterfaces[*].Association.PublicIp' \
-  | grep [0-9] | sed -e 's/ *//' -e 's/"//g')
+  --output text)
 
 echo "EC2_PUBLIC_IP : $EC2_IP"
 

@@ -54,14 +54,15 @@ ansible-playbook -i inventory.ini playbook.yml
 1. Check the `web` and `back` services through `traefik` :
 
 ```bash
-curl <EC2_PUBLIC_IP>
+curl http://<EC2_PUBLIC_IP>
 
-curl <EC2_PUBLIC_IP>/api/hello
+curl http://<EC2_PUBLIC_IP>/api/health
 
-curl <EC2_PUBLIC_IP>/api/health
-
-# also http://<EC2_PUBLIC_IP>/ - or simply open your browser
+curl http://<EC2_PUBLIC_IP>/api/articles      # backend article list
 ```
+
+> ⚠️ Backend routes depend on the API mounted into the stack.
+> *To learn more, see [Step 8 – Use Case](docs/08-use-case-api.md)*
 
 2. Inspect the service container's logs
 
@@ -81,10 +82,9 @@ ssh -i ~/.ssh/devops-bootstrap.key ubuntu@<EC2_PUBLIC_IP> sudo docker logs devop
 
 
 ```bash
-ssh -i ~/.ssh/devops-bootstrap.key ubuntu@<EC2_PUBLIC_IP>
-sudo -i
-docker volume ls
-docker volume inspect devops-bootstrap_pgdata
+ssh -i ~/.ssh/devops-bootstrap.key ubuntu@<EC2_PUBLIC_IP> sudo docker volume ls
+
+ssh -i ~/.ssh/devops-bootstrap.key ubuntu@<EC2_PUBLIC_IP> sudo docker volume inspect devops-bootstrap_pgdata
 ```
 
 - 3.2 Create a test table :

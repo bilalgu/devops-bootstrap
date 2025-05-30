@@ -3,25 +3,10 @@
     path: /opt/devops-bootstrap/
     state: directory
 
-- name: Copy docker-compose.yml
+- name: Copy Docker Compose files
   copy:
-    src: docker-compose.yml
-    dest: /opt/devops-bootstrap/docker-compose.yml
-
-- name: Copy web directory
-  copy:
-    src: web/
-    dest: /opt/devops-bootstrap/web
-
-- name: Copy backend directory
-  copy:
-    src: backend/
-    dest: /opt/devops-bootstrap/backend/
-
-- name: Copy prometheus.yml
-  copy:
-    src: prometheus.yml
-    dest: /opt/devops-bootstrap/prometheus.yml
+    src: files/
+    dest: /opt/devops-bootstrap/
 
 - name: Install docker-compose
   apt:

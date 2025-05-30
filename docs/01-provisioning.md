@@ -39,5 +39,8 @@ ssh -i ~/.ssh/devops-bootstrap.key ubuntu@<EC2_PUBLIC_IP>
 To retrieve `<EC2_PUBLIC_IP>` via `aws cli` :
 
 ```bash
-aws ec2 describe-instances --filters Name=tag:Name,Values=devops-bootstrap-instance --query 'Reservations[*].Instances[*].NetworkInterfaces[*].Association.PublicIp' | grep [0-9] | sed -e 's/ *//' -e 's/"//g'
+aws ec2 describe-instances \
+  --filters Name=tag:Name,Values=devops-bootstrap-instance \
+  --query 'Reservations[*].Instances[*].NetworkInterfaces[*].Association.PublicIp' \
+  --output text
 ```

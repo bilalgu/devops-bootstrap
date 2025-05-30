@@ -27,7 +27,7 @@ services:
       - app-net
 
   back:
-    build: ./backend
+    build: ./use-cases/use-case-node-api
     depends_on:
       db:
         condition: service_healthy
@@ -57,6 +57,7 @@ services:
       POSTGRES_USER: appuser
       POSTGRES_PASSWORD: mysecretpassword
     volumes:
+      - ./use-cases/use-case-node-api/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
       - pgdata:/var/lib/postgresql/data
     networks:
       - app-net

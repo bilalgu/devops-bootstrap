@@ -1,24 +1,48 @@
 # DevOps Bootstrap Stack
 
-A minimalist realistic DevOps project that provisions cloud infrastructure, configures it automatically, and deploys a secure, scalable, and containerized web service.
+A minimalist and production-like DevOps project that provisions infrastructure, automates configuration, and deploys secure and scalable web services using containers.
 
 ## Objectives
 
-Build a DevOps stack that includes:
+Build a reusable and production-like DevOps stack designed for backend developers and infrastructure engineers.
 
-- Infrastructure as Code with Terraform (AWS EC2 provisioning)
-- Configuration Management with Ansible
-- Containerized Multi-Service Stack :
-	- `traefik` - Reverse proxy
-	- `web` - Static frontend (Nginx)
-	- `back` - API (Node.js with Express)
-	- `db` - (PostgreSQL)
-	- `cadvisor` — Exposes live container and host metrics
-	- `prometheus` — Collects metrics and provides a query interface
-- Security hardening (SSH + firewall + fail2ban + nftables)
-- CI/CD pipeline via GitHub Actions
+It includes:
 
-This project serves as a technical portfolio, a personal learning environment, and a solid foundation for more advanced DevOps/Cyber/Cloud scenarios.
+- **Infrastructure as Code** with Terraform (provisions AWS EC2)
+    
+- **Configuration Management** with Ansible
+    
+- **Containerized Multi-Service Architecture**:
+    
+    - `traefik` – Reverse proxy for centralized HTTP routing
+        
+    - `web` – Static frontend (served via Nginx)
+        
+    - `back` – API backend (plug any Node.js / Flask project)
+        
+    - `db` – PostgreSQL database (initialized via SQL if needed)
+        
+    - `cadvisor` – Live container and host metrics
+        
+    - `prometheus` – Metric collection and querying
+        
+- **Security hardening**:
+    
+    - SSH protection, fail2ban, nftables firewall
+        
+    - Docker-safe rule injection at boot time (systemd)
+        
+- **CI/CD Pipeline** with GitHub Actions (triggered on push)
+
+***
+
+This stack is both:
+
+- a **public portfolio** for DevOps/Cyber/cloud practices
+    
+- a **real-world template** to deploy and test backend APIs
+    
+- a **sandbox** to learn, iterate, and demonstrate production setups
 
 ## Deployment
 
@@ -28,7 +52,7 @@ terraform init
 terraform plan
 terraform apply
 
-cd configuration/ansible/
+cd ../configuration/ansible/
 ansible-playbook -i inventory.ini playbook.yml
 ```
 
@@ -37,18 +61,33 @@ ansible-playbook -i inventory.ini playbook.yml
 ```bash
 # Main entrypoints:
 curl http://<EC2_PUBLIC_IP>                   # frontend
-curl http://<EC2_PUBLIC_IP>/api/hello         # backend API
 curl http://<EC2_PUBLIC_IP>/api/health        # backend health check
-curl http://<EC2_PUBLIC_IP>/monitoring/query  # Prometheus query UI
-
-# Or simply open http://<EC2_PUBLIC_IP> in your browser
+curl http://<EC2_PUBLIC_IP>/api/articles      # backend article list
+curl http://<EC2_PUBLIC_IP>/monitoring/query  # Prometheus UI
 ```
 
-You can get `<EC2_PUBLIC_IP>` with :
+> ⚠️ Backend routes depend on the API mounted into the stack.
+> *To learn more, see [Step 8 – Use Case](docs/08-use-case-api.md)*
+
+### Option 1 – Manual
+
+Replace `<EC2_PUBLIC_IP>` by your instance’s public IP:
 
 ```bash
-aws ec2 describe-instances --filters Name=tag:Name,Values=devops-bootstrap-instance --query 'Reservations[*].Instances[*].NetworkInterfaces[*].Association.PublicIp' | grep [0-9] | sed -e 's/ *//' -e 's/"//g'
+curl http://1.2.3.4
 ```
+
+### Option 2 – Dynamic (AWS CLI)
+
+```bash
+EC2_PUBLIC_IP=$(aws ec2 describe-instances \
+  --filters Name=tag:Name,Values=devops-bootstrap-instance \
+  --query 'Reservations[*].Instances[*].NetworkInterfaces[*].Association.PublicIp' \
+  --output text)
+
+curl http://$EC2_PUBLIC_IP
+```
+
 
 ## CI/CD Pipeline
 

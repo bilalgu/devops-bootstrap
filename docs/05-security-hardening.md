@@ -50,8 +50,7 @@ ssh -o "IdentitiesOnly=yes" ubuntu@<EC2_PUBLIC_IP>
 2. Check the fail2ban jail's status in the EC2 VMs
 
 ```bash
-ssh -i ~/.ssh/devops-bootstrap.key ubuntu@<EC2_PUBLIC_IP>
-sudo fail2ban-client status sshd-ec2connect
+ssh -i ~/.ssh/devops-bootstrap.key ubuntu@<EC2_PUBLIC_IP> sudo fail2ban-client status sshd-ec2connect
 ```
 
 ***
