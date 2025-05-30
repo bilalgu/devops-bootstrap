@@ -93,7 +93,7 @@ curl http://<EC2_PUBLIC_IP>/api/articles
 Option 2 – Dynamic (AWS CLI):
 
 ```bash
-EC2_PUBLIC_IP=$(/local/home/bg281242/bin/aws-cli/v2/2.27.1/bin/aws ec2 describe-instances \
+EC2_PUBLIC_IP=$(aws ec2 describe-instances \
   --filters Name=tag:Name,Values=devops-bootstrap-instance \
   --query 'Reservations[*].Instances[*].NetworkInterfaces[*].Association.PublicIp' \
   --output text)

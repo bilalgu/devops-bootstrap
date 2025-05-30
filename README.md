@@ -34,6 +34,7 @@ It includes:
         
 - **CI/CD Pipeline** with GitHub Actions (triggered on push)
 
+
 ***
 
 This stack is both:
@@ -43,6 +44,7 @@ This stack is both:
 - a **real-world template** to deploy and test backend APIs
     
 - a **sandbox** to learn, iterate, and demonstrate production setups
+
 
 ## Deployment
 
