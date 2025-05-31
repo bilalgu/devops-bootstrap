@@ -8,6 +8,11 @@
     src: files/
     dest: /opt/devops-bootstrap/
 
+- name: Set correct permissions on acme.json
+  file:
+    path: /opt/devops-bootstrap/letsencrypt/acme.json
+    mode: '600'
+
 - name: Install docker-compose
   apt:
     name: docker-compose

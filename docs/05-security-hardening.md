@@ -27,6 +27,7 @@ Prevent unauthorized access attempts by :
 
 **Notes :**
 
+- This Ansible role is executed before the "deploy_stack" role → ensures the system is secured before exposing services
 - SSH configuration applied through Ansible template module
 - Custom `fail2ban` jail targeting EC2-specific SSH logs
 - Uses a `prefregex`-based filter (`sshd-ec2connect.conf`)
