@@ -25,7 +25,7 @@ services:
       - "traefik.http.routers.web-local.rule=PathPrefix(`/`)"
       - "traefik.http.routers.web-local.entrypoints=web"
 
-      - "traefik.http.routers.web-https.rule=Host(`prodstack.xyz`) && PathPrefix(`/`)"
+      - "traefik.http.routers.web-https.rule=(Host(`prodstack.xyz`) || Host(`www.prodstack.xyz`)) && PathPrefix(`/`)"
       - "traefik.http.routers.web-https.entrypoints=websecure"
       - "traefik.http.routers.web-https.tls.certresolver=letsencrypt"
     networks:
@@ -42,7 +42,7 @@ services:
       - "traefik.http.routers.api-local.rule=PathPrefix(`/api`)"
       - "traefik.http.routers.api-local.entrypoints=web"
 
-      - "traefik.http.routers.api-https.rule=Host(`prodstack.xyz`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.api-https.rule=(Host(`prodstack.xyz`) || Host(`www.prodstack.xyz`)) && PathPrefix(`/api`)"
       - "traefik.http.routers.api-https.entrypoints=websecure"
       - "traefik.http.routers.api-https.tls.certresolver=letsencrypt"
     environment:
@@ -89,7 +89,7 @@ services:
       - "traefik.http.routers.prometheus-local.rule=PathPrefix(`/monitoring`)"
       - "traefik.http.routers.prometheus-local.entrypoints=web"
 
-      - "traefik.http.routers.prometheus-https.rule=Host(`prodstack.xyz`) && PathPrefix(`/monitoring`)"
+      - "traefik.http.routers.prometheus-https.rule=(Host(`prodstack.xyz`) || Host(`www.prodstack.xyz`)) && PathPrefix(`/monitoring`)"
       - "traefik.http.routers.prometheus-https.entrypoints=websecure"
       - "traefik.http.routers.prometheus-https.tls.certresolver=letsencrypt"
 
