@@ -3,15 +3,37 @@
     path: /opt/devops-bootstrap/
     state: directory
 
-- name: Copy Docker Compose files
-  copy:
+- name: Copy Docker Compose files except Traefik, Docker Compose and Lets Encrypt
+  synchronize:
     src: files/
     dest: /opt/devops-bootstrap/
+    rsync_opts:
+      - "--exclude=traefik.yml"
+      - "--exclude=docker-compose-*.yml"
+      - "--exclude=letsencrypt/"
 
-- name: Set correct permissions on acme.json
+- name: Copy correct Docker Compose config
+  copy:
+    src: "{{ 'docker-compose-https.yml' if use_https | bool else 'docker-compose-http.yml' }}"
+    dest: /opt/devops-bootstrap/docker-compose.yml
+
+- name: Copy Traefik config only if HTTPS enabled
+  copy:
+    src: traefik.yml
+    dest : /opt/devops-bootstrap/traefik.yml
+  when: use_https | bool
+
+- name: Copy Lets Encrypt only if HTTPS enabled
+  copy:
+    src: letsencrypt/
+    dest : /opt/devops-bootstrap/letsencrypt/
+  when: use_https | bool
+
+- name: Set correct permissions on acme.json only if HTTPS enabled
   file:
     path: /opt/devops-bootstrap/letsencrypt/acme.json
     mode: '600'
+  when: use_https | bool
 
 - name: Install docker-compose
   apt:

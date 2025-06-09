@@ -6,7 +6,7 @@
     - name: Update APT cache
       apt:
         update_cache: yes
-    
+
     - name: Install Docker
       apt:
         name: docker.io

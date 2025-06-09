@@ -2,7 +2,7 @@
 
 **Objective:**
 
-Add secure access to all services via HTTPS using a real domain name and automatic certificate generation with Let's Encrypt (via Traefik).
+Enable secure access to all services via HTTPS using a real domain name and automatic certificate generation with Let’s Encrypt (via Traefik).
 
 *Allow port 443 in the AWS security group created in [Step 1 – Provisioning](01-provisioning.md)*
 
@@ -10,39 +10,33 @@ Add secure access to all services via HTTPS using a real domain name and automat
 
 - Real domain name: `prodstack.xyz` (registered via Dynadot — $2 !!!!! all my money)
 
-- Both HTTP and HTTPS are supported for now:
-	- Traefik entrypoints:
-	    - `web` (port 80)
-	    - `websecure` (port 443)
+- The stack supports two deployment modes:
+	- local/demo → no HTTPS
+	- production → full HTTPS with domain and TLS
+
+- DNS can be updated automatically via the Dynadot API  
+  *(requires an account and API access key)*
 
 - Docker’s automatic chain rules allow access to these ports even if not explicitly opened via `nftables`.
 	- *(But still need to allow them in the AWS security group — cloud firewall vs VM firewall)*
 
-- Traefik stores the auto-generated certificate from Let’s Encrypt in `acme.json`.
-
-- DNS must point to the EC2 public IP.
-	- *(Automatic HTTPS only works if DNS is correctly set)*
-
-**Limitation:**
-
-- Each time the EC2 instance is destroyed and recreated via Terraform:
-	- The public IP changes
-	- The DNS must be updated manually on Dynadot
-	- This breaks automatic deployment for users who clone the repo
+- Traefik stores the Let’s Encrypt TLS certificates in `acme.json`
 
 **File structure:**
 
 ```
-├── configuration/           
-│   └── ansible/    
-│       ├── roles/         
+├── configuration/
+│   └── ansible/       
+│       ├── inventory.ini
+│       ├── roles/
 │       │   ├── deploy_compose_stack/
 │       │   │   ├── files/
-│       │   │   │   ├── docker-compose.yml
+│       │   │   │   ├── docker-compose-https.yml
+│       │   │   │   ├── docker-compose-http.yml
 │       │   │   │   ├── letsencrypt/
 │       │   │   │   │   └── acme.json
 │       │   │   │   ├── traefik.yml
-│       │   │   └── tasks/
+│       │   │   └── tasks
 │       │   │       └── main.yml
 ├── terraform/
 │   ├── main.tf
@@ -50,21 +44,30 @@ Add secure access to all services via HTTPS using a real domain name and automat
 
 **Deployment:**
 
-1. Manually update the DNS settings on [Dynadot](https://www.dynadot.com) to point to the new EC2 public IP (admin only):
+1. Choose deployment mode in `inventory.ini`:
 
-> ⚠️ This setup is not yet production-ready. Manual DNS updates are required after each infrastructure change.
+```ini
+use_https=true        # or false
+```
+
+2. Update DNS records via the Dynadot API  
+	*Required only if `use_https=true`*
 
 ```bash
+API_KEY="<INSERE_YOUR_KEY>"
+DOMAIN="prodstack.xyz"
+
 EC2_PUBLIC_IP=$(aws ec2 describe-instances \
   --filters Name=tag:Name,Values=devops-bootstrap-instance \
   --query 'Reservations[*].Instances[*].NetworkInterfaces[*].Association.PublicIp' \
   --output text)
 
-echo $EC2_PUBLIC_IP
-# --> use this IP to update the A record
+curl "https://api.dynadot.com/api3.xml?key=$API_KEY&command=set_dns2&domain=$DOMAIN&main_record_type0=a&main_record0=$EC2_PUBLIC_IP&subdomain0=www&sub_record_type0=a&sub_record0=$EC2_PUBLIC_IP"
+
+curl "https://api.dynadot.com/api3.xml?key=$API_KEY&command=get_dns&domain=$DOMAIN"
 ```
 
-2. Run the playbook:
+3. Run the playbook:
 
 ```bash
 cd configuration/ansible
@@ -78,12 +81,9 @@ curl https://prodstack.xyz
 curl https://prodstack.xyz/api/health
 curl https://prodstack.xyz/api/articles
 curl https://prodstack.xyz/monitoring/query
+
+curl https://www.prodstack.xyz
+curl https://www.prodstack.xyz/api/health
+curl https://www.prodstack.xyz/api/articles
+curl https://www.prodstack.xyz/monitoring/query
 ```
-
-(You can also try with `http://` and compare in a browser with the secure version.)
-
-**Next step:**
-
-* Automatically redirect all HTTP to HTTPS (Traefik config)
-* Add `www` subdomain
-* Find a persistent or dynamic DNS solution to automate record updates
