@@ -106,5 +106,5 @@ Si tu bosses sur un projet backend/API et que tu veux :
 Écris-moi :
 ## Me contacter
 
-🔗 [Mon LinkedIn](https://www.linkedin.com/in/bilal-guirre-395544221/)
-📧 bilal.guirre.pro@proton.me
+- 🔗 [Mon LinkedIn](https://www.linkedin.com/in/bilal-guirre-395544221/)
+- 📧 bilal.guirre.pro@proton.me
