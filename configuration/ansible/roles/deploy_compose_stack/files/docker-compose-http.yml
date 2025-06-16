@@ -74,7 +74,6 @@ services:
     image: "prom/prometheus"
     labels:
       - "traefik.enable=true"
-
       - "traefik.http.routers.prometheus-local.rule=PathPrefix(`/monitoring`)"
       - "traefik.http.routers.prometheus-local.entrypoints=web"
       - "traefik.http.middlewares.strip-monitoring.stripPrefix.prefixes=/monitoring"

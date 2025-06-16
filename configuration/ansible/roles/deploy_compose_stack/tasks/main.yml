@@ -35,12 +35,29 @@
     mode: '600'
   when: use_https | bool
 
+- name: Set correct permissions on cert-rerty.sh only if HTTPS enabled
+  file:
+    path: /opt/devops-bootstrap/scripts/cert-retry.sh
+    mode: '740'
+  when: use_https | bool
+
 - name: Install docker-compose
   apt:
     name: docker-compose
     state: present
 
+- name: Retry until Traefik ACME cert is OK
+  script: ./scripts/cert-retry.sh
+  register: cert_retry_output
+  when: use_https | bool
+
+- name: Show Cert Retry result
+  debug:
+    var: cert_retry_output.stdout_lines
+  when: use_https | bool
+
 - name: Launch docker-compose stack
   shell: docker-compose up -d
   args:
     chdir: /opt/devops-bootstrap/
+  when: not use_https | bool
