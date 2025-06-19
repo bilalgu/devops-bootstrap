@@ -64,6 +64,6 @@ ssh -i ~/.ssh/devops-bootstrap.key ubuntu@<EC2_PUBLIC_IP> sudo docker inspect --
 
 *(The first few digits are usually sufficient.)*
 
-3. A minimal dashboard JSON is available at: [[docs/grafana/docker-logs-dashboard.json]]
+3. A minimal dashboard JSON is available at: [docker-logs-dashboard.json](docs/grafana/docker-logs-dashboard.json)
 
 To import it: go to **Dashboards** → **New** → **Import**, and upload the JSON file.
