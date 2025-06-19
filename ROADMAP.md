@@ -14,6 +14,21 @@ The objective is to build a secure, scalable, and production-like DevOps stack â
 | Alerting              | Define alerts on key metrics or system events                                                   |
 | Documentation         | Create a use-case-oriented section for backend developers                                       |
 
+### HTTPS & DNS - Experimental Branch
+
+Work was conducted between to implement:
+
+- Automated DNS provisioning via Dynadot API  
+- Letâ€™s Encrypt certificate issuance via Traefik (HTTP challenge)  
+- Custom domain routing with wildcard/subdomain support  
+- DNS propagation handling and mitigation of ACME timeouts  
+
+Despite significant progress, the implementation revealed high complexity and low ROI at this stage. 
+Effort has been preserved in a separate branch:  
+`https-dns-experiments`
+
+Will return stronger !
+
 ### Experimental (Future ideas)
 
 | Area              | Objective                                               |

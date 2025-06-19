@@ -3,6 +3,13 @@
     path: /opt/devops-bootstrap/
     state: directory
 
+- name: Create .env file
+  template:
+    src: env.j2
+    dest: /opt/devops-bootstrap/.env
+  vars:
+    ec2_public_ip: "{{ ansible_host }}"
+
 - name: Copy Docker Compose files
   copy:
     src: files/

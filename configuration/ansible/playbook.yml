@@ -18,10 +18,10 @@
         state: started
         enabled: true
 
-    - name: Deploy multi-service app
-      include_role:
-        name: deploy_compose_stack
-
     - name: Apply security hardening
       include_role:
         name: security_hardening
+
+    - name: Deploy multi-service app
+      include_role:
+        name: deploy_compose_stack

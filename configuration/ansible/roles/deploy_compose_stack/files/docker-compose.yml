@@ -22,7 +22,6 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.web.rule=PathPrefix(`/`)"
       - "traefik.http.routers.web.entrypoints=web"
-      - "traefik.http.services.web.loadbalancer.server.port=80"
     networks:
       - app-net
 
@@ -35,7 +34,6 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.api.rule=PathPrefix(`/api`)"
       - "traefik.http.routers.api.entrypoints=web"
-      - "traefik.http.services.api.loadbalancer.server.port=8080"
     environment:
       DB_HOST: db
       DB_USER: appuser
@@ -76,13 +74,70 @@ services:
     image: "prom/prometheus"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.prometheus.rule=PathPrefix(`/monitoring`)"
+      - "traefik.http.routers.prometheus.rule=PathPrefix(`/monitoring/prometheus`)"
       - "traefik.http.routers.prometheus.entrypoints=web"
-      - "traefik.http.middlewares.strip-monitoring.stripPrefix.prefixes=/monitoring"
-      - "traefik.http.routers.prometheus.middlewares=strip-monitoring"
-      - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
+      - "traefik.http.middlewares.strip-prometheus-prefix.stripPrefix.prefixes=/monitoring/prometheus"
+      - "traefik.http.routers.prometheus.middlewares=strip-prometheus-prefix"
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - app-net
+
+  loki:
+    image: grafana/loki
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.loki.rule=PathPrefix(`/monitoring/loki`)"
+      - "traefik.http.routers.loki.entrypoints=web"
+      - "traefik.http.middlewares.strip-loki-prefix.stripPrefix.prefixes=/monitoring/loki"
+      - "traefik.http.routers.loki.middlewares=strip-loki-prefix"
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - app-net
+
+  promtail:
+    image: grafana/promtail
+    volumes:
+      - /var/lib/docker/containers/:/var/lib/docker/containers/:ro
+      - ./promtail-config.yml:/etc/promtail/config.yml:ro
+    command: -config.file=/etc/promtail/config.yml
+    networks:
+      - app-net
+
+  grafana:
+    image: grafana/grafana
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.grafana.rule=PathPrefix(`/monitoring/grafana`)"
+      - "traefik.http.routers.grafana.entrypoints=web"
+      - "traefik.http.middlewares.strip-grafana-prefix.stripPrefix.prefixes=/monitoring/grafana"
+      - "traefik.http.routers.grafana.middlewares=strip-grafana-prefix"
+    environment:
+      - GF_SERVER_ROOT_URL=http://$EC2_PUBLIC_IP/monitoring/grafana
+      - GF_SERVER_FROM_SUB_PATH=true
+      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_FEATURE_TOGGLES_ENABLE=alertingSimplifiedRouting,alertingQueryAndExpressionsStepMode
+    entrypoint:
+      - sh
+      - -euc
+      - |
+        mkdir -p /etc/grafana/provisioning/datasources
+        cat << EOF > /etc/grafana/provisioning/datasources/ds.yaml
+        apiVersion: 1
+        datasources:
+        - name: Loki
+          type: loki
+          access: proxy
+          orgId: 1
+          url: http://loki:3100
+          basicAuth: false
+          isDefault: true
+          version: 1
+          editable: false
+        EOF
+        /run.sh
     networks:
       - app-net
 

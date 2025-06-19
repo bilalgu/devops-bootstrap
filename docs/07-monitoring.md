@@ -25,7 +25,7 @@ Introduce real-time metrics and storage to monitor container-level performance a
 
 - Only Prometheus is publicly accessible via Traefik
   - Port `9090` is no longer exposed externally
-  - A `stripPrefix` middleware is used to route `/monitoring` → `/` for Prometheus
+  - A `stripPrefix` middleware is used to route `/monitoring/prometheus` → `/` for Prometheus
 - Prometheus scrapes metrics from `cadvisor` every 5 seconds
 
 **Deployment :**
@@ -40,10 +40,10 @@ ansible-playbook -i inventory.ini playbook.yml
 1. Visit the Prometheus interface:
 
 ```
-http://<EC2_PUBLIC_IP>/monitoring/query
+http://<EC2_PUBLIC_IP>/monitoring/prometheus/query
 ```
 
-2. Check that `cadvisor` appears in **Status → Targets**
+2. Check that `cadvisor` appears in **Status → Target health**
 
 3. Try a basic query:
 

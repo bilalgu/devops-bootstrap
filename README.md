@@ -14,7 +14,8 @@ Ce projet est un **modèle DevOps complet** conçu pour les développeurs, CTO o
 - **Terraform** – Provisionnement d’une instance AWS EC2
 - **Ansible** – Configuration système
 - **Docker + Traefik** – Stack multi-service (frontend, backend, DB)
-- **Prometheus + cAdvisor** – Monitoring applicatif et machine
+- **Prometheus + cAdvisor** – Monitoring applicatif et machine (métriques)
+- **Loki + Promtail + Grafana** – Centralisation des logs Docker avec visualisation via dashboard
 - **GitHub Actions** – Pipeline CI/CD sur `main`
 
 > Utilisable comme :
@@ -48,14 +49,17 @@ ansible-playbook -i inventory.ini playbook.yml
 
 ```bash
 # Main entrypoints:
-curl http://<EC2_PUBLIC_IP>                   # frontend
-curl http://<EC2_PUBLIC_IP>/api/health        # backend health check
-curl http://<EC2_PUBLIC_IP>/api/articles      # backend article list
-curl http://<EC2_PUBLIC_IP>/monitoring/query  # Prometheus UI
+curl http://<EC2_PUBLIC_IP>  # frontend
+curl http://<EC2_PUBLIC_IP>/api/health  # backend health check
+curl http://<EC2_PUBLIC_IP>/api/articles  # backend article list
+curl http://<EC2_PUBLIC_IP>/monitoring/prometheus/query  # Prometheus UI
+curl -I http://<EC2_PUBLIC_IP>/monitoring/grafana  # Grafana UI (logs)
 ```
 
 > ⚠️ Backend routes depend on the API mounted into the stack.
 > *To learn more, see [Step 8 – Use Case](docs/08-use-case-api.md)*
+
+> *To explore the Grafana interface and centralized logs (Traefik, backend, etc.), see [Step 9 – Centralized Logging & Dashboards](docs/09-logging-dashboards.md).*
 
 #### Option 1 – Manual
 
