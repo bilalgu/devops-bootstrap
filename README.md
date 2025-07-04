@@ -1,22 +1,27 @@
 # DevOps Bootstrap Stack – Infra cloud prête à déployer
 
-> Déployez rapidement un backend/API dans un environnement sécurisé et automatisé – en quelques commandes
+> **Automatisez et sécurisez vos déploiements cloud en quelques commandes.**  
+> Gagnez du temps, évitez les erreurs, et posez une base saine pour faire évoluer vos projets.
 
 
-Ce projet est un **modèle DevOps complet** conçu pour les développeurs, CTO ou freelances qui veulent :
+Cette stack est conçue pour **aider les CTOs et startups tech à :**
 
-- Déployer proprement une API/backend sans galères d'infra
-- Avoir un pipeline CI/CD, une base de sécurité, et du monitoring dès le départ
-- Travailler avec une stack reproductible, documentée et adaptée à un usage réel
+- Déployer proprement un backend/API **sans galères manuelles**
+- Avoir une **pipeline CI/CD fiable**, un monitoring clair, et une base de sécurité dès le départ
+- Travailler avec une **infra reproductible, lisible et documentée**, qui évite les surprises en prod
+
+**En clair :** Vous partez sur une fondation **automatisée et sécurisée**, qui tient la route à long terme.
 
 ## Ce que contient cette stack
 
-- **Terraform** – Provisionnement d’une instance AWS EC2
-- **Ansible** – Configuration système
-- **Docker + Traefik** – Stack multi-service (frontend, backend, DB)
-- **Prometheus + cAdvisor** – Monitoring applicatif et machine (métriques)
-- **Loki + Promtail + Grafana** – Centralisation des logs Docker avec visualisation via dashboard
-- **GitHub Actions** – Pipeline CI/CD sur `main`
+Un **exemple concret**, prêt à cloner et adapter :
+
+- **Terraform** – Provisionnement cloud (AWS EC2)
+- **Ansible** – Configuration système et durcissement
+- **Docker + Traefik** – Architecture multi-service (frontend, backend, DB)
+- **Prometheus + cAdvisor** – Monitoring des métriques machines & conteneurs
+- **Loki + Promtail + Grafana** – Centralisation et visualisation des logs
+- **GitHub Actions** – Pipeline CI/CD déclenché sur chaque push
 
 > Utilisable comme :
 > - Modèle pour vos projets clients
@@ -102,12 +107,12 @@ Each push to the `main` branch triggers the workflow, which :
 Je m'appelle Bilal. 
 J’aime bâtir des infrastructures **robustes, lisibles et sécurisées** — des fondations qui tiennent la route, et qui permettent d’itérer vite et bien.
 
-Si tu bosses sur un projet backend/API et que tu veux :
-- Gagner du temps sur ton déploiement
-- Sécuriser ta stack dès le début
-- Ou bosser avec quelqu’un qui apprend vite et s’implique vraiment
+Si vous êtes CTO, dev lead ou startup et que vous voulez :
+- Mettre votre projet en ligne proprement
+- Partir sur une fondation solide
+- Ou simplement discuter de la manière d’industrialiser ça
 
-Écris-moi :
+📬 **Écrivez-moi :**
 ## Me contacter
 
 - 🔗 [Mon LinkedIn](https://www.linkedin.com/in/bilal-guirre-395544221/)
