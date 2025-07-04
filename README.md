@@ -23,11 +23,6 @@ Un **exemple concret**, prêt à cloner et adapter :
 - **Loki + Promtail + Grafana** – Centralisation et visualisation des logs
 - **GitHub Actions** – Pipeline CI/CD déclenché sur chaque push
 
-> Utilisable comme :
-> - Modèle pour vos projets clients
-> - Base d’apprentissage DevOps solide
-> - Template freelance à adapter rapidement
-
 ## Objectifs du projet (version originale)
 
 A minimalist and production-like DevOps project that provisions infrastructure, automates configuration, and deploys secure and scalable web services using containers.
